@@ -1,4 +1,4 @@
-comunity_token = 'vk1.a.jCnKcDEOm1a2Ta0B8CuAK3l5X3shgCjAqDFh9S2WTyXoa2I_uDW5oV5KHxlExUNL7xucgwPa5eq9pz0dBSsXAzq9c8UI-Ma5Sb5FDfPQARcQagBoVVXuSDYiXfHeJvH9cYcTuu02Peidvytyy_RP1JeHV1e7pjlyLUZpIAtS0YfEf18Jl_t7FLzy6v0eiNiZdrBW-mOwJgG4nLfLc0r-Fg'
-access_token = 'vk1.a.sn6ZIIf_XYxSzJN0WSgQoPR-hyxwofiZUnTVa0YtHBsaptzOCOm2K6BIRStCeC0IcaaL8e0HHs-pNTXEuLOvm387X_7_uMOMR6VcHIav6kVD84dwVSPSHxJiaY78VceJ4Om0RsQcaWNFqFLFEPmz84LdEg_8nU7AqseC4yxzoeEjQiFBE4wTR4vxbMmfFjwiDJBedcFvaVV4D_HvdKE10A'
+comunity_token = ''
+access_token = ''
 
-DSN = 'postgresql://postgres:123@localhost:5432/vkinder'
+DSN = ''
