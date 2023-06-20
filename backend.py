@@ -101,9 +101,3 @@ if __name__ == '__main__':
     #
     # pprint(serch)
     # pprint(photo)
-
-
-# 379994323
-
-# req = requests.get('https://vk.com/public219660454')
-# print(req.text)
