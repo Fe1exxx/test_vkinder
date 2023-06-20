@@ -35,9 +35,7 @@ def check_user(engine, profile_id, worksheet_id):
 if __name__ == '__main__':
     engine = create_engine(DSN)
     Base.metadata.create_all(engine)
-    # add_user(engine, 1234, 87767)
-    res = check_user(engine, 1234, 87767)
-    print(res)
+    
 
 
 
