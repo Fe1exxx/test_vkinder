@@ -58,6 +58,8 @@ class Botinterface:
                     """БОТ ИЩЕТ АНКЕТЫ ПО ДАННЫМ ПОЛЬЗОВАТЕЛЯ"""
                     if self.worksheets:
                         worksheet = self.worksheets.pop()
+                        while base.check_user(engine, profile_id=event.user_id, worksheet_id=worksheet["id"]) == True:
+                            worksheet = self.worksheets.pop()
                         """БЕРЁМ 3 ФОТО ИЗ ВЫБРАННОЙ АНКЕТЫ"""
                         photos = self.vk_tools.photos_get(worksheet["id"])
                         photo_string = ''
@@ -67,16 +69,18 @@ class Botinterface:
                         self.worksheets = self.vk_tools.user_serch(self.params, self.offset)
                         worksheet = self.worksheets.pop()
                         while base.check_user(engine, profile_id=event.user_id, worksheet_id=worksheet["id"]) == True:
+                            self.worksheets = self.vk_tools.user_serch(self.params, self.offset)
                             worksheet = self.worksheets.pop()
                         photos = self.vk_tools.photos_get(worksheet["id"])
                         photo_string = ''
                         for photo in photos:
                             photo_string += f'photo{photo["owner_id"]}_{photo["id"]},'
                             self.offset += 30
-                    self.write_msg(event.user_id, f'имя: {worksheet["name"]} ссылка: vk.com/id{worksheet["id"]}', attachment=photo_string)
-                    # while base.check_user(engine, profile_id=event.user_id, worksheet_id=worksheet["id"]) == True:
-                    """ЗАПИСЬ АНКЕТЫ В БАЗУ ДАННЫХ"""
-                    base.add_user(engine=engine, profile_id=event.user_id, worksheet_id=worksheet["id"])
+                    if base.check_user(engine, profile_id=event.user_id, worksheet_id=worksheet["id"]) == False:
+                        self.write_msg(event.user_id, f'имя: {worksheet["name"]} ссылка: vk.com/id{worksheet["id"]}', attachment=photo_string)
+                        self.write_msg(event.user_id, base.check_user(engine, profile_id=event.user_id, worksheet_id=worksheet["id"]))
+                        """ЗАПИСЬ АНКЕТЫ В БАЗУ ДАННЫХ"""
+                        base.add_user(engine=engine, profile_id=event.user_id, worksheet_id=worksheet["id"])
                     # if event.text.lower() == "в избранное":
                     #     base.add_favorites(engine=engine, profile_id=event.user_id, worksheet_id=worksheet["id"])
                     # if event.text.lower() == "в черный список":
@@ -85,6 +89,12 @@ class Botinterface:
                     self.write_msg(event.user_id, "Пока((")
                 else:
                     self.write_msg(event.user_id, "Не поняла вашего ответа...")
+
+
+
+if __name__ == '__main__':
+    bot = Botinterface(comunity_token, access_token)
+    bot.handler()
 
 
 
