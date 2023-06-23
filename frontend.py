@@ -33,8 +33,10 @@ class Botinterface:
         for event in longpoll.listen():
             if event.type == VkEventType.MESSAGE_NEW and event.to_me:
                 if event.text.lower() == "привет":
+                    """БЕРЁМ ДАННЫЕ ПОЛЬЗОВАТЕЛЯ"""
                     self.params = self.vk_tools.get_profile_info(event.user_id)
                     self.write_msg(event.user_id, f'Хай, {self.params["name"]}')
+                    """ПРОВЕРКА НАЛИЧИЯ ГОРОДА"""
                     if self.params["city"] == None:
                         self.write_msg(event.user_id, f'введите ваш город для поиска')
                         for event in longpoll.listen():
@@ -42,20 +44,21 @@ class Botinterface:
                                 self.params["city"] = event.text.replace('-', ' ').title()
                                 self.write_msg(event.user_id, f'город добавлен, {self.params["name"]}, {self.params["city"]}')
                                 break
-                    if self.params["bdate"] == None:
-                        self.write_msg(event.user_id, f'введите ваш возраст для поиска')
-                        for event in longpoll.listen():
-                            if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                                if event.text.isdigit():
-                                    self.params["bdate"] = int(event.text.title())
-                                    self.write_msg(event.user_id, f'возраст добавлен, {self.params["name"]}, {self.params["city"]}, {self.params["bdate"]}')
-                                    break
+                    # """ПРОВЕРКА НАЛИЧИЯ ВОЗРАСТА"""
+                    # if self.params["bdate"] == None:
+                    #     self.write_msg(event.user_id, f'введите ваш возраст для поиска')
+                    #     for event in longpoll.listen():
+                    #         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+                    #             if event.text.isdigit():
+                    #                 self.params["bdate"] = int(event.text.title())
+                    #                 self.write_msg(event.user_id, f'возраст добавлен, {self.params["name"]}, {self.params["city"]}, {self.params["bdate"]}')
+                    #                 break
                 elif event.text.lower() == "поиск":
                     self.write_msg(event.user_id, "начнем поиск")
+                    """БОТ ИЩЕТ АНКЕТЫ ПО ДАННЫМ ПОЛЬЗОВАТЕЛЯ"""
                     if self.worksheets:
                         worksheet = self.worksheets.pop()
-                        while base.check_user(engine, profile_id=event.user_id, worksheet_id=worksheet["id"]) == True:
-                            worksheet = self.worksheets.pop()
+                        """БЕРЁМ 3 ФОТО ИЗ ВЫБРАННОЙ АНКЕТЫ"""
                         photos = self.vk_tools.photos_get(worksheet["id"])
                         photo_string = ''
                         for photo in photos:
@@ -63,13 +66,21 @@ class Botinterface:
                     else:
                         self.worksheets = self.vk_tools.user_serch(self.params, self.offset)
                         worksheet = self.worksheets.pop()
+                        while base.check_user(engine, profile_id=event.user_id, worksheet_id=worksheet["id"]) == True:
+                            worksheet = self.worksheets.pop()
                         photos = self.vk_tools.photos_get(worksheet["id"])
                         photo_string = ''
                         for photo in photos:
                             photo_string += f'photo{photo["owner_id"]}_{photo["id"]},'
                             self.offset += 30
                     self.write_msg(event.user_id, f'имя: {worksheet["name"]} ссылка: vk.com/id{worksheet["id"]}', attachment=photo_string)
+                    # while base.check_user(engine, profile_id=event.user_id, worksheet_id=worksheet["id"]) == True:
+                    """ЗАПИСЬ АНКЕТЫ В БАЗУ ДАННЫХ"""
                     base.add_user(engine=engine, profile_id=event.user_id, worksheet_id=worksheet["id"])
+                    # if event.text.lower() == "в избранное":
+                    #     base.add_favorites(engine=engine, profile_id=event.user_id, worksheet_id=worksheet["id"])
+                    # if event.text.lower() == "в черный список":
+                    #     base.add_black_list(engine=engine, profile_id=event.user_id, worksheet_id=worksheet["id"])
                 elif event.text.lower() == "пока":
                     self.write_msg(event.user_id, "Пока((")
                 else:
