@@ -13,7 +13,6 @@ class VkTools:
         user_year = bdate.split('.')[2]
         now = datetime.now().year
         return now - int(user_year)
-        # надо дописать если у пользователя не указан возраст попросить вписать
 
 
     def get_profile_info(self, user_id):
