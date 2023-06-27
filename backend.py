@@ -95,9 +95,4 @@ if __name__ == '__main__':
     user_id = 40507711
     profile = tools.get_profile_info(user_id)
     print(profile)
-    # serch = tools.user_serch(profile, 30)
-    # photos = serch.pop()
-    # photo = tools.photos_get(photos['id'])
-    #
-    # pprint(serch)
-    # pprint(photo)
+    
